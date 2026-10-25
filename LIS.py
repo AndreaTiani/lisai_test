@@ -41,3 +41,7 @@ if response.status_code == 200:
     print(data["result"])
 else:
     print("Errore:", response.json())
+
+
+# TODO:
+# Verificare che il contesto funzioni
