@@ -15,7 +15,9 @@ async def chiama_llm(
     prompt: str, system_prompt: str = "", history: Optional[List[Dict[str, str]]] = None
 ) -> str:
 
-    deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+    # Scommenta questo per usare la chiave di DeepSeek 4.1 Flash 1017
+    # deepseek_key = os.getenv("DEEPSEEK_API_KEY")
+    deepseek_key = ""
 
     messages = []
     if system_prompt:
