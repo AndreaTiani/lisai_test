@@ -1,7 +1,16 @@
-uvicorn
 fastapi
 requests
 python-dotenv
 ollama
 pydantic
 openai
+numpy<2
+opencv-contrib-python==4.11.0.86   # quella richiesta da mediapipe 0.10.21
+mediapipe==0.10.21                 # la 1.0.x crasha sui Mac (errore Metal)
+torch
+uvicorn[standard]
+pytest
+httpx2
+websockets
+cryptography>=42                   # certificato HTTPS (scripts/certificato.py)
+PyJWT>=2.10.1
