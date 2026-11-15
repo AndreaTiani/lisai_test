@@ -37,7 +37,7 @@ async def chiama_llm(
     # Altrimenti usa Ollama
     else:
         ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-        model = os.getenv("OLLAMA_MODEL", "llama3.2")
+        model = os.getenv("OLLAMA_MODEL", "Jadio/Qwen3_4b_instruct_q4km:latest")
 
         client = AsyncClient(host=ollama_host)
         response = await client.chat(model=model, messages=messages)

@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
 from src.handlers.llm_handler import chiama_llm_json
+from src.handlers.rag_handler import chiama_rag
 
 
 # Classe per richieste dell'utente per LLM
@@ -10,6 +11,12 @@ class PromptInput(BaseModel):
     system_prompt: str = Field(
         default="Sei un assistente utile.", description="System prompt"
     )
+
+
+# Classe per richieste RAG (domande sul PDF in data/)
+class RagInput(BaseModel):
+    domanda: str = Field(..., description="La domanda dell'utente sul documento")
+    k: int = Field(default=4, ge=1, le=10, description="Numero di chunk da recuperare")
 
 
 # Creiamo il router
@@ -36,4 +43,16 @@ async def generate_response(data: PromptInput):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Errore durante l'esecuzione dell'LLM locale: {str(e)}",
+        )
+
+
+@router.post("/rag")
+async def rag_response(data: RagInput):
+    try:
+        # Recupera i chunk dal PDF indicizzato e risponde con l'LLM
+        return await chiama_rag(domanda=data.domanda, k=data.k)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Errore durante l'esecuzione del RAG: {str(e)}",
         )

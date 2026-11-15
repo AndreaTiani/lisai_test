@@ -14,3 +14,7 @@ httpx2
 websockets
 cryptography>=42                   # certificato HTTPS (scripts/certificato.py)
 PyJWT>=2.10.1
+chromaDB
+pypdf                              # estrazione testo dal PDF per il RAG
+tokenizers                         # conteggio token per il chunking (anche dipendenza di chromadb)
+huggingface-hub                    # download del tokenizer del modello di embedding

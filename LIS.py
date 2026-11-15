@@ -43,5 +43,26 @@ else:
     print("Errore:", response.json())
 
 
-# TODO:
-# Verificare che il contesto funzioni
+# ====================================== Servizio RAG: domanda sul documento ======================================
+
+url = "http://127.0.0.1:8000/ai/rag"
+
+payload = {
+    "domanda": "Cerco lavoro, ho esperienza da meccanico",
+    "k": 3,  # quanti chunk di contesto recuperare (1-10)
+}
+
+# Alla prima chiamata, se l'indice non esiste, il server lo crea:
+# in quel caso la risposta arriva dopo alcuni minuti
+response = requests.post(url, json=payload, timeout=600)
+
+if response.status_code == 200:
+    data = response.json()
+    print(data["status"])
+    print("Fonti:", data["fonti"])
+    print(data["output"])
+
+    # Il contesto recuperato serve a capire se sbaglia il retrieval o l'LLM
+    # print(data["contesto"])
+else:
+    print("Errore:", response.json())
