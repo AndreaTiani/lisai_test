@@ -47,7 +47,7 @@ avvio scarica dalla rete il tokenizer del modello di embedding (~35 MB, una volt
 > sono incluse: servono solo per l'elaborazione video e vanno installate a parte se e quando
 > quella parte viene ripresa nello stesso ambiente.
 
-## 3. Configurazione (`.env`)
+## 3. Configurazione (`.env`) [Opzionale e sconsigliata, serve solo a modificare modelli ecc.]
 
 Crea un file `.env` nella root (è già in `.gitignore`):
 
