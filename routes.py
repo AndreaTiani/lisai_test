@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
 
-from backend.llm_handler import chiama_llm_json
-from backend.rag_handler import chiama_rag
+from llm_handler import chiama_llm_json
+from rag_handler import chiama_rag
 
 
 # Classe per richieste dell'utente per LLM

@@ -1,20 +1,17 @@
+# API
 fastapi
-requests
-python-dotenv
-ollama
-pydantic
-openai
-numpy<2
-opencv-contrib-python==4.11.0.86   # quella richiesta da mediapipe 0.10.21
-mediapipe==0.10.21                 # la 1.0.x crasha sui Mac (errore Metal)
-torch
 uvicorn[standard]
-pytest
-httpx2
-websockets
-cryptography>=42                   # certificato HTTPS (scripts/certificato.py)
-PyJWT>=2.10.1
-chromaDB
-pypdf                              # estrazione testo dal PDF per il RAG
-tokenizers                         # conteggio token per il chunking (anche dipendenza di chromadb)
-huggingface-hub                    # download del tokenizer del modello di embedding
+pydantic
+python-dotenv
+requests
+
+# LLM e embedding via Ollama
+ollama>=0.6                        # serve Client.embed(dimensions=...)
+openai                             # importato da src/utils.py (ramo DeepSeek disattivato)
+
+# RAG
+chromadb>=1.5,<2                   # il codice usa l'API 1.x (embed_query, query_texts)
+pypdf>=4                           # estrazione del testo dal PDF
+tokenizers>=0.15                   # conteggio token per il chunking
+huggingface-hub>=0.23              # download del tokenizer del modello di embedding
+numpy

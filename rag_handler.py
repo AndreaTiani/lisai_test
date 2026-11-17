@@ -21,11 +21,11 @@ from ollama import Client
 from pypdf import PdfReader
 from tokenizers import SentencePieceUnigramTokenizer, Tokenizer
 
-from backend.utils import chiama_llm
+from utils import chiama_llm
 
 # ============================== Configurazione ==============================
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 PDF_PATH = BASE_DIR / "data" / "RAG_helpdesk.pdf"
 CHROMA_PATH = BASE_DIR / "chroma_db"
 
