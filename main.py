@@ -3,7 +3,7 @@ import os
 import uvicorn
 from fastapi import FastAPI
 
-from src.routes import router
+from backend.routes import router
 
 HOST = os.getenv("HOST", "127.0.0.1")
 PORT = int(os.getenv("PORT", "8000"))

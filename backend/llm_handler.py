@@ -1,4 +1,4 @@
-from src.utils import chiama_llm
+from backend.utils import chiama_llm
 
 async def chiama_llm_json(prompt: str, system_prompt: str = "") -> dict:
     # Esegue la chiamata tramite la funzione in utils.py
