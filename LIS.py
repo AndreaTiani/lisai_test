@@ -4,10 +4,6 @@
 
 import requests
 
-# Questa stringa serve ad Andrea per avviare il file
-# & "c:\Users\A1628apulia\Desktop\Progetti Python\.venv\Scripts\python.exe" "c:/Users/A1628apulia/Desktop/Progetti Python/LIS/LIS.py"
-
-
 # ====================================== Servizio di test ======================================
 
 # Chiamata all'endpoint dall'esterno
@@ -48,7 +44,7 @@ else:
 url = "http://127.0.0.1:8000/ai/rag"
 
 payload = {
-    "domanda": "Cerco lavoro, ho esperienza da meccanico",
+    "domanda": "Quali documenti devo portare?",
     "k": 3,  # quanti chunk di contesto recuperare (1-10)
 }
 
@@ -58,8 +54,8 @@ response = requests.post(url, json=payload, timeout=600)
 
 if response.status_code == 200:
     data = response.json()
-    print(data["status"])
-    print("Fonti:", data["fonti"])
+    # print(data["status"])
+    # print("Fonti:", data["fonti"])
     print(data["output"])
 
     # Il contesto recuperato serve a capire se sbaglia il retrieval o l'LLM

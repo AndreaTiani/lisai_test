@@ -1,20 +1,3 @@
-"""Handler RAG: indicizza il PDF in data/ su ChromaDB e risponde con l'LLM.
-
-Flusso:
-    1. Il testo del PDF viene estratto pagina per pagina (pypdf).
-    2. Ogni pagina viene divisa in chunk **misurati in token** con il tokenizer
-       dello stesso modello di embedding (non in caratteri).
-    3. Gli embedding sono calcolati da Ollama con un modello multilingue
-       (default: embeddinggemma:300m) tramite `OllamaEmbeddingFunction`.
-    4. Per ogni domanda si recuperano i chunk più simili e si passano
-       come contesto all'LLM tramite `chiama_llm` di src/utils.py.
-
-Il chunking in token è necessario perché i modelli di embedding hanno un
-limite espresso in token (embeddinggemma: 2048), non in caratteri: spezzare
-"a caratteri" rischia di superare il limite o di lasciare chunk con pochissimo
-contenuto utile.
-"""
-
 import asyncio
 import os
 import re
@@ -46,8 +29,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PDF_PATH = BASE_DIR / "data" / "RAG_helpdesk.pdf"
 CHROMA_PATH = BASE_DIR / "chroma_db"
 
-# Modello di embedding servito da Ollama (multilingue, 768 dimensioni, 2048 token)
-# Alternative più leggere: "paraphrase-multilingual" (384 dim).
 # Va scaricato una volta con:  ollama pull embeddinggemma:300m
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "embeddinggemma:300m")
 OLLAMA_HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
@@ -81,13 +62,15 @@ PREFISSO_QUERY = os.getenv(
     "EMBEDDING_PREFISSO_QUERY", "task: search result | query: "
 )
 
-SYSTEM_PROMPT_RAG = (
-    "Sei un assistente esperto delle policy e delle regole operative di helpdesk "
-    "descritte nella documentazione Forma.Temp. Rispondi usando esclusivamente "
-    "le informazioni presenti nel contesto fornito: se la risposta non è nel "
-    "contesto, dillo chiaramente invece di inventare. Cita la pagina da cui "
-    "proviene l'informazione e rispondi in italiano."
-)
+SYSTEM_PROMPT_RAG = ("""
+Sei un assistente esperto delle policy e delle regole operative di helpdesk
+descritte nella documentazione Forma.Temp. Rispondi usando esclusivamente
+le informazioni presenti nel contesto fornito: se la risposta non è nel
+contesto, dillo chiaramente invece di inventare. Cita la pagina da cui
+proviene l'informazione e rispondi in italiano.
+La domanda ti verrà data dall'operatore e non dall'utente che sta
+usufruendo del servizio quindi rispondi a modo.
+""")
 
 # Client, collezione e tokenizer sono costosi da creare: li teniamo in cache
 _client: Optional[ClientAPI] = None
@@ -96,7 +79,6 @@ _tokenizer: Optional[Tokenizer] = None
 
 
 # ============================== Embedding via Ollama ==============================
-
 
 class OllamaEmbeddingFunction(EmbeddingFunction[Documents]):
     """Calcola gli embedding con un modello servito da Ollama.
@@ -155,7 +137,6 @@ class OllamaEmbeddingFunction(EmbeddingFunction[Documents]):
 
 # ============================== ChromaDB ==============================
 
-
 def get_client() -> ClientAPI:
     """Restituisce il client ChromaDB persistente (creato una sola volta)."""
     global _client
@@ -180,7 +161,6 @@ def get_collection() -> Collection:
 
 
 # ============================== Estrazione e chunking ==============================
-
 
 def _carica_tokenizer() -> Tokenizer:
     """Scarica e carica il tokenizer, con fallback sul vocab sentencepiece."""
