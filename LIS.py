@@ -44,7 +44,7 @@ else:
 url = "http://127.0.0.1:8000/ai/rag"
 
 payload = {
-    "domanda": "Quali documenti devo portare?",
+    "domanda": "Come si fa la pasta alla amatriciana?",
     "k": 3,  # quanti chunk di contesto recuperare (1-10)
 }
 
